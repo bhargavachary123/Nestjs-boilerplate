@@ -1,19 +1,78 @@
-version: "3"
-
+version: "3.8"
 services:
   mysql:
     image: mysql:8
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: $DB_PASSWORD
+      MYSQL_DATABASE: $DB_DATABASE
+    volumes:
+      - ./telemysql_data:/var/lib/mysql
+      - /var/www/html/mysql_data:/var/www/html
+    ports:
+      - 3307:3306
+    networks:
+      - app-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: test
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: $DB_DATABASE
     ports:
-      - "3306:3306"
-  db-test:
-    image: mysql:8
-    restart: always
+      - '8080:80'
+    networks:
+      - app-network
+
+  redis:
+    image: redis:6.2
+    restart: unless-stopped
+    ports:
+      - '6380:6379'
+    command: redis-server --loglevel warning
+    volumes:
+     - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - var/www/redis-data:/var/lib/redis
+    networks:
+      - app-network
+
+  nestjs-app:
+    image: "bhargavachary/nestjs-boilerplate:latest"
+    restart: unless-stopped
+    env_file: ./.env
+    depends_on:
+      - mysql
+      - redis
+    ports:
+      - $APP_PORT:$APP_PORT
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: test
-    ports:
-      - "3307:3306"
+      - APP_URL=$APP_URL
+      - APP_ENV=$APP_ENV
+      - APP_PORT=$APP_PORT
+      - APP_WEBSITE_URL=$APP_WEBSITE_URL
+      - DB_HOST=$DB_HOST
+      - DB_PORT=$DB_PORT
+      - DB_USERNAME=$DB_USERNAME
+      - DB_PASSWORD=$DB_PASSWORD
+      - DB_DATABASE=$DB_DATABASE
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SWAGGER_USERNAME=$SWAGGER_USERNAME
+      - SWAGGER_PASSWORD=$SWAGGER_PASSWORD
+      - JWT_SECRET_KEY=$JWT_SECRET_KEY
+      - JWT_EXPIRATION_TIME=$JWT_EXPIRATION_TIME
+      - MAIL_SENDER=$MAIL_SENDER
+      - MAIL_PASSWORD=$MAIL_PASSWORD
+    stdin_open: true
+    tty: true
+    volumes:
+      - /var/www/html/nestjs:/var/www/html
+      - /var/www/nestjs:/var/www
+    networks:
+      - app-network
+
+networks:
+  app-network:
+      driver: bridge
