@@ -5,7 +5,6 @@ import { Roles } from './auth/roles.decorator';
 import { RolesGuard } from './auth/roles.guard';
 import { Response } from 'express'; // Import the Response class from the express module
 import { ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
-
 import * as path from 'path';
 import * as fs from 'fs';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -22,6 +21,11 @@ export class AppController {
   @Get()
   getHello(): string {
     return this.appService.getHello();
+  }
+
+  @Get('initialize')
+  seeder(): Promise<any> {
+    return this.appService.seeder();
   }
 
   @Get('message')

@@ -15,7 +15,8 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter());
   
   const whitelist = [
-    process.env.APP_URL as string, 
+    process.env.APP_URL as string,
+    process.env.APP_WEBSITE_URL as string,
   ];
 
   if(process.env.APP_ENV == 'development'){// development environment
@@ -53,7 +54,7 @@ async function bootstrap() {
     users: { [process.env.SWAGGER_USERNAME]: process.env.SWAGGER_PASSWORD },
     challenge: true,
   });
-  // app.use('/api', authMiddleware);
+  app.use('/api', authMiddleware);
 
   app.useStaticAssets(join(__dirname, '..', 'public'), {
     prefix: '/public/',

@@ -20,6 +20,9 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-store';
+import { AdminMaster } from './adminmaster/admin-master.entity';
+import { UserMaster } from './usermaster/user-master.entity';
+import { College } from './college/college.entity';
 
 console.log(`${process.cwd()}/${process.env.NODE_ENV}.env`)
 @Module({
@@ -31,8 +34,8 @@ console.log(`${process.cwd()}/${process.env.NODE_ENV}.env`)
     CacheModule.registerAsync({
       useFactory: () => ({
         store: redisStore,
-        host: 'localhost',
-        port: 6379,
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT,
         ttl: 21600,
       }),
     }),
@@ -48,6 +51,7 @@ console.log(`${process.cwd()}/${process.env.NODE_ENV}.env`)
     TypeOrmModule,
     MysqlModule,
     CollegeModule,
+    TypeOrmModule.forFeature([AdminMaster, UserMaster,College])
   ],
   controllers: [AppController],
 

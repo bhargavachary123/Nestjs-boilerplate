@@ -18,7 +18,7 @@ import { MysqlService } from './mysql.service';
         database: mysqlService.database,
         autoLoadEntities: true,
         charset: 'latin1',
-        synchronize: false,
+        synchronize: true,
         logging: ["error"],
         logger: "file",
       }),
