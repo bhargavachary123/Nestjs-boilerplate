@@ -8,8 +8,7 @@ services:
       MYSQL_ROOT_PASSWORD: $DB_PASSWORD
       MYSQL_DATABASE: $DB_DATABASE
     volumes:
-      - ./telemysql_data:/var/lib/mysql
-      - /var/www/html/mysql_data:/var/www/html
+      - ./mysql_data:/var/lib/mysql
     ports:
       - 3307:3306
     networks:
@@ -34,7 +33,6 @@ services:
     command: redis-server --loglevel warning
     volumes:
      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-      - var/www/redis-data:/var/lib/redis
     networks:
       - app-network
 
@@ -52,8 +50,8 @@ services:
       - APP_ENV=$APP_ENV
       - APP_PORT=$APP_PORT
       - APP_WEBSITE_URL=$APP_WEBSITE_URL
-      - DB_HOST=$DB_HOST
-      - DB_PORT=$DB_PORT
+      - DB_HOST=mysql
+      - DB_PORT=3306
       - DB_USERNAME=$DB_USERNAME
       - DB_PASSWORD=$DB_PASSWORD
       - DB_DATABASE=$DB_DATABASE
@@ -68,8 +66,9 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - /var/www/html/nestjs:/var/www/html
-      - /var/www/nestjs:/var/www
+      - ./nestjs-app/logs:/logs
+      - ./nestjs-app/ormlogs.log:/ormlogs.log
+      - ./nestjs-app/public:/public
     networks:
       - app-network
 

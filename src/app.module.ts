@@ -23,6 +23,7 @@ import { redisStore } from 'cache-manager-redis-store';
 import { AdminMaster } from './adminmaster/admin-master.entity';
 import { UserMaster } from './usermaster/user-master.entity';
 import { College } from './college/college.entity';
+import { JwtService } from '@nestjs/jwt';
 
 console.log(`${process.cwd()}/${process.env.NODE_ENV}.env`)
 @Module({
@@ -64,6 +65,6 @@ console.log(`${process.cwd()}/${process.env.NODE_ENV}.env`)
       provide: APP_INTERCEPTOR,
       useClass: JwtExpiredFilter,
     },
-    AppService, MysqlService]
+    AppService, MysqlService,JwtService]
 })
 export class AppModule { }

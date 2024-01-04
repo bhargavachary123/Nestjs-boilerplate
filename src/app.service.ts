@@ -10,6 +10,8 @@ import { RType, UserMaster } from './usermaster/user-master.entity';
 import { Repository } from 'typeorm';
 import { AdminMaster } from './adminmaster/admin-master.entity';
 import { hash } from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { jwtConstants } from './auth/constants';
 
 @Injectable()
 export class AppService {
@@ -22,6 +24,7 @@ export class AppService {
     private readonly adminMasterRepository: Repository<AdminMaster>,
     @InjectRepository(College)
     private readonly collegeRepository: Repository<College>,
+    private jwtService: JwtService,
   ) {
     this.filepath = path.basename(__filename);
   }
@@ -40,7 +43,7 @@ export class AppService {
   @OnEvent('event')
   handleevent() {
     console.log("cron job event occured");
-    console .log("event has been executed");
+    console.log("event has been executed");
   }
 
   async uploadPdfs(file: any, dynamicPath?: string, name?: string) {
@@ -106,11 +109,10 @@ export class AppService {
         college.code = "clg";
         colleges[0] = await this.collegeRepository.save(college);
       }
-      const admins = await this.adminMasterRepository.find();
+      const admins = await this.userMasterRepository.find();
       if (admins.length == 0) {
-        console.log("admin")
         const username = "admin";
-        const password =  "admin";
+        const password = "admin";
         const user = new UserMaster();
         user.username = username;
         user.password = await hash(password, 10);
@@ -121,9 +123,14 @@ export class AppService {
         admin.name = username;
         admin.usermaster = { id: res.id } as UserMaster;
         await this.adminMasterRepository.save(admin);
-        // console.log("Username:- ", username, "\nPassword:- ", password);
-        return "Database initialized successfully.";
-
+        const payload = { error: false, username: username, sub: res.id, role: user.role, collegeId: colleges[0].id, collegeName: colleges[0].code, name: username };
+        const access_token = this.jwtService.sign(payload, { secret: jwtConstants.secret,expiresIn: jwtConstants.expirationTime });
+        return `
+        <div style="display: flex;width:500px; flex-direction: column; align-items: center; overflow-x: hidden; overflow-y: scroll; margin-top: 100px; border: 2px solid black; max-width: 80%; overflow: auto;">
+        <p style="text-align: center;">Database initialized successfully.</p>
+        <p style="text-align: center;">Access Token: ${access_token}</p>
+    </div>
+    `;
       }
       return "Database already initialized successfully."
     } catch (error) {

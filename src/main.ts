@@ -76,6 +76,5 @@ async function bootstrap() {
   await app.listen(`${process.env.APP_PORT}`, () => {
     logger.info(`NestJs API server started on : ${ process.env.APP_PORT}`);
   });
-  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

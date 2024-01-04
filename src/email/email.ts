@@ -16,7 +16,7 @@ export class EmailService {
     },
   });
 
-  async sendEmail(username:string, email: string, otp: number): Promise<any> {
+  async sendEmail(username:string, email: string, otp: number): Promise<any> { //this prototype is used to send the otp throw mail to reset password
     const mailOptions = {
       from: `"name project" <${process.env.MAIL_SENDER}>`,
       to: email, //reciver mail
@@ -25,7 +25,7 @@ export class EmailService {
         <p>Dear ${username} </p>
         <p>${otp} is your one time password (OTP). Please do not share the otp with others.</p><br/>
         <p>Regards,</p>
-        <p>Team name project</p>
+        <p>Team {service provider name}</p>
       `,
     };
 
