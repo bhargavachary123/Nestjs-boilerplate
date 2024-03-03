@@ -30,13 +30,11 @@ export class AuthService {
 
   async login(user: any) {
     try {
-      console.log(" in login ", user);
       if (user.error) {
         throw user.message;
       }
       user = user.user;
       const payload = { error: false, username: user.username, sub: user.id, role: user.role, collegeId: user.college.id, collegeName: user.college.code, name: user.name };
-      console.log("payload ", payload)
 
       const refreshToken = this.tokenService.generateRefreshToken(user.id);
 

@@ -18,7 +18,7 @@ export class EmailService {
 
   async sendEmail(username:string, email: string, otp: number): Promise<any> { //this prototype is used to send the otp throw mail to reset password
     const mailOptions = {
-      from: `"name project" <${process.env.MAIL_SENDER}>`,
+      from: `${process.env.APP_NAME} <${process.env.MAIL_SENDER}>`,
       to: email, //reciver mail
       subject: 'Email Verification',
       html: `

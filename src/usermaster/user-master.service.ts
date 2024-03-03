@@ -284,7 +284,8 @@ export class UserMasterService {
             const result = await this.userMasterRepository.findOne({
                 where: { username: username }
             });
-
+            if(result==null)
+                throw "User not found";
             if (result.role == 'ADMIN') {
                 const res = await this.userMasterRepository.findOne({
                     where: { username: username },

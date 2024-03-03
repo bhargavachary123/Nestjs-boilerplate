@@ -101,7 +101,7 @@ export class AppService {
 
   async seeder(): Promise<any> {
     try {
-      let colleges = await this.collegeRepository.find();
+      const colleges = await this.collegeRepository.find();
       if (colleges.length == 0) {
         console.log("college")
         const college = new College();
@@ -124,7 +124,7 @@ export class AppService {
         admin.usermaster = { id: res.id } as UserMaster;
         await this.adminMasterRepository.save(admin);
         const payload = { error: false, username: username, sub: res.id, role: user.role, collegeId: colleges[0].id, collegeName: colleges[0].code, name: username };
-        const access_token = this.jwtService.sign(payload, { secret: jwtConstants.secret,expiresIn: jwtConstants.expirationTime });
+        const access_token = this.jwtService.sign(payload, { secret: jwtConstants.secret, expiresIn: jwtConstants.expirationTime });
         return `
         <div style="display: flex;width:500px; flex-direction: column; align-items: center; overflow-x: hidden; overflow-y: scroll; margin-top: 100px; border: 2px solid black; max-width: 80%; overflow: auto;">
         <p style="text-align: center;">Database initialized successfully.</p>

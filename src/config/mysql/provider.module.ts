@@ -16,6 +16,7 @@ import { MysqlService } from './mysql.service';
         username: mysqlService.username,
         password: mysqlService.password,
         database: mysqlService.database,
+        timezone:'+05:30',
         autoLoadEntities: true,
         charset: 'latin1',
         synchronize: true,

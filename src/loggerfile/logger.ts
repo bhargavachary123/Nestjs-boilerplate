@@ -6,17 +6,7 @@ const logFormat = format.combine(
   format.printf(info => `${info.timestamp} [${info.level}] > ${info.message}`),
 );
 
-const levels = {
-  error: 0,
-  info: 1,
-  debug: 2,
-  warn: 3,
-  data: 4,
-  alert: 5,
-};
- 
 const logger = createLogger({
-  levels,
   format: logFormat,
   transports: [
     new DailyRotateFile({
@@ -24,13 +14,9 @@ const logger = createLogger({
       filename: 'logs/rotate-%DATE%.log',
       datePattern: 'YYYY-MM-DD',
       zippedArchive: true,
-      maxFiles: '30d',
-      maxSize: '30m',
-    }),
-    // new (transports.File)({
-    //   filename: 'logs/debugfile.log',
-    //   level: 'debug',
-    // }) 
+      maxFiles: '15d', // past 15 days log files 
+      maxSize: '30m', //each file max 30mb if exceed it will create one more file on same day
+    }), 
   ],
 });
 

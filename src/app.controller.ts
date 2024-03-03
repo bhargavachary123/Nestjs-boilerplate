@@ -1,17 +1,13 @@
-import { Body, Controller, FileTypeValidator, Get, HttpException, HttpStatus, MaxFileSizeValidator, Param, ParseFilePipe, Post, Request, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, FileTypeValidator, Get, HttpException, HttpStatus, MaxFileSizeValidator, Param, ParseFilePipe, Post, Request, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { AppService } from './app.service';
-import { JwtAuthGuard } from './auth/jwt-auth.guard';
-import { Roles } from './auth/roles.decorator';
-import { RolesGuard } from './auth/roles.guard';
-import { Response } from 'express'; // Import the Response class from the express module
-import { ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express'; 
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import * as path from 'path';
 import * as fs from 'fs';
 import { FileInterceptor } from '@nestjs/platform-express';
 import logger from './loggerfile/logger';
 
 @ApiTags("Home")
-
 @Controller('')
 export class AppController {
 
@@ -61,12 +57,10 @@ export class AppController {
         </body>
       </html>
     `
-    return { Error: false, htmlcode: htmlCodeOff };
+    return { Error: false, htmlcode: htmlCodeOn };
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('ADMIN')
-  @ApiSecurity("JWT-auth")
+
   @Get('pdfs/:filename')
   @ApiResponse({ status: 201, description: 'response successfull' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
@@ -76,9 +70,6 @@ export class AppController {
     fileStream.pipe(res);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('ADMIN')
-  @ApiSecurity("JWT-auth")
   @Get('pngs/:filename')
   @ApiResponse({ status: 201, description: 'response successfull' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
@@ -87,8 +78,6 @@ export class AppController {
     const fileStream = fs.createReadStream(filePath);
     fileStream.pipe(res);
   }
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('ADMIN')
   @Post('pdffile')
   @ApiResponse({ status: 201, description: 'The record updated successfully.' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
@@ -116,8 +105,6 @@ export class AppController {
     }
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('ADMIN')
   @Post('imgfile')
   @ApiResponse({ status: 201, description: 'The record has been successfully created.' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
@@ -145,6 +132,5 @@ export class AppController {
       return { Error: true, message: (typeof error == 'object' ? error.message : error) };
     }
   }
+
 }
-
-
