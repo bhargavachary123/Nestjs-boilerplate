@@ -1,8 +1,6 @@
 dist
 node_modules
 .vscode
-logs
-Dockerfile
-.dockerignore
-ormlogs.log
-ormconfig.js
+*.env
+env.*
+public

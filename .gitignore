@@ -21,8 +21,10 @@
 
 # logs
 /logs
+*.log
 
 #env
-development.env
-production.env
-.env
+*.env
+
+public
+ormconfig.js
