@@ -3,6 +3,8 @@ Starting from the base project https://github.com/nestjs/nest/tree/master/sample
 ### Features
 
 - [x] Database. Support [TypeORM] and [Mysql].
+- [x] Seeding [typeorm-seeding]
+- [x] Config Service [@nestjs/config]
 - [x] Config Service [@nestjs/config]
 - [x] Mailing [nodemailer]
 - [x] Jwt Authentication and Authorization.
@@ -39,7 +41,7 @@ Starting from the base project https://github.com/nestjs/nest/tree/master/sample
 
 `npm run start:dev`
 
-project will run on localhost:8000
+project will run on localhost:3000
 
 ## Environment Variables
 APP_ENV=production
@@ -71,4 +73,5 @@ JWT_EXPIRATION_TIME = '15d' || '8h' || '1y'
 MAIL_SENDER=support@yourapp.com
 MAIL_PASSWORD=email-server-password
 ### Links
-- Swagger (API docs): <http://localhost:8000/api>
+- Swagger (API docs): <http://localhost:3000/api>
+- Swagger (API docs): <http://localhost:3000/api>
