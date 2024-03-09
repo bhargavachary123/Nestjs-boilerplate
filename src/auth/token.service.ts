@@ -7,5 +7,4 @@ export class TokenService {
     const refreshToken = uuidv4();
     return refreshToken;
   }
-
 }

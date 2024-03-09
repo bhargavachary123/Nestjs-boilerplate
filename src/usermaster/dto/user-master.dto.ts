@@ -56,24 +56,6 @@ export class UpdateUserMasterDto {
     email: string;
 
 }
-export class BulkUpdateUserMasterDto {
-    
-    @ApiProperty({ type: String })
-    @IsNotEmpty()
-    @IsString()
-    username: string;
-
-    @ApiProperty({ enum: UserRole })
-    @IsNotEmpty()
-    @IsEnum(UserRole)
-    role: UserRole;
-
-    @ApiProperty({ type: String })
-    password: string;
-
-    @ApiProperty({ type: String })
-    email: string;
-}
 
 export class PassUpdateUserMasterDto
 {

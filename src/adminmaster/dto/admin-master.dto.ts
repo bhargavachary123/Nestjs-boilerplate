@@ -1,6 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsEnum, IsNotEmpty, IsString } from "class-validator";
-import { RType } from "src/usermaster/user-master.entity";
+import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 
 export class AdminMasterDto {
 
@@ -13,11 +12,6 @@ export class AdminMasterDto {
   @IsNotEmpty()
   @IsString()
   username: string;
-
-  @ApiProperty({ enum: RType })
-  @IsNotEmpty()
-  @IsEnum(RType)
-  role: RType;
 
   @ApiProperty({ type: String })
   @IsNotEmpty()

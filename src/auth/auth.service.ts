@@ -7,6 +7,7 @@ import { UserMasterService } from 'src/usermaster/user-master.service';
 import logger from 'src/loggerfile/logger';
 import * as path from 'path';
 import { LoginResponseType } from 'src/return.formats';
+import { ERROR_MESSAGES } from 'src/constraints';
 
 @Injectable()
 export class AuthService {
@@ -25,7 +26,7 @@ export class AuthService {
       const { password, ...result } = user.payload;
       return result;
     }
-    return null;
+    return ERROR_MESSAGES.INVALID_CREDENTIALS;
   }
 
   async login(user: any): Promise<LoginResponseType> {

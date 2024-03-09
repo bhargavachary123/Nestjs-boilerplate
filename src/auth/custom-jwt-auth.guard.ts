@@ -1,5 +1,6 @@
 import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import logger from 'src/loggerfile/logger';
 
 @Injectable()
 export class CustomJwtAuthGuard extends AuthGuard('jwt') {
@@ -11,6 +12,7 @@ export class CustomJwtAuthGuard extends AuthGuard('jwt') {
     if (err || !user) {
       // Handle UnauthorizedException specifically for token expiration
       if (err instanceof UnauthorizedException && err.message === 'jwt expired') {
+        logger.error (context)
         throw new UnauthorizedException('JWT token has expired');
       }
       throw err || new UnauthorizedException();

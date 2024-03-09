@@ -1,6 +1,6 @@
 import { Catch, ExceptionFilter, ArgumentsHost } from '@nestjs/common';
-import { ThrottlerException } from '@nestjs/throttler';
 import { Response } from 'express';
+import logger from 'src/loggerfile/logger';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -9,7 +9,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = host.switchToHttp().getRequest();
-
+    
+    logger.error(exception.response['message'] || exception.response.message || exception.response )
     if (exception.response == 'ThrottlerException: Too Many Requests') {
       return response.json({
         Error: true,

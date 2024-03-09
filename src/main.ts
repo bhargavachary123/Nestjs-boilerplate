@@ -61,7 +61,7 @@ async function bootstrap() {
   });
   
   const options = new DocumentBuilder()
-    .setTitle('Example')
+    .setTitle('Nestjs-boilerplate')
     .setVersion('1.0')
     .addBearerAuth({
       type: "http",
@@ -76,5 +76,6 @@ async function bootstrap() {
   await app.listen(`${process.env.APP_PORT}`, () => {
     logger.info(`NestJs API server started on : ${ process.env.APP_PORT}`);
   });
+  console.log(`NestJs API server started on : ${await app.getUrl()}`)
 }
 bootstrap();
