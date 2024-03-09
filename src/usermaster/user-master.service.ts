@@ -9,7 +9,6 @@ import {
     ForgotPasswordUserMasterDto,
     VerifyOTPUserMasterDto,
     UpdatePasswordForStudentTeacherDto,
-    BulkUpdateUserMasterDto
 } from './dto/user-master.dto';
 import { hash } from 'bcrypt';
 import logger from 'src/loggerfile/logger';
@@ -18,6 +17,8 @@ import { EmailService } from 'src/email/email';
 import { compare } from 'bcrypt';
 import * as path from 'path';
 import { DataMethodResponseType, NormalMethodResponseType } from 'src/return.formats';
+import { ERROR_MESSAGES, RESPONSE_MESSAGE } from 'src/constraints';
+import { UserRole } from 'src/enum';
 
 @Injectable()
 export class UserMasterService {
@@ -37,7 +38,7 @@ export class UserMasterService {
 
             const user = await this.userMasterRepository.findOne({ where: { username: userMasterDto.username, college: { id: userMasterDto.collegeId } } });
             if (user)
-                throw new BadRequestException("username exits for same college");
+                throw ERROR_MESSAGES.USERNAME_EXISTS;
             const userMaster = new UserMaster();
             userMaster.username = userMasterDto.username.trim();
             userMaster.password = await hash(userMasterDto.password.trim(), 10);// Hash the password using bcrypt
@@ -60,31 +61,11 @@ export class UserMasterService {
             logger.debug(`usermaster update started`);
             const userdata = await this.userMasterRepository.findOne({ where: { id: updateUserMasterDto.id, college: { id: userInfo.collegeId } } });
             if (userdata == null)
-                throw new BadRequestException("username not exits in usermaster table");
+                throw ERROR_MESSAGES.USERNAME_EXISTS;
             userdata.username = updateUserMasterDto.username.trim();
             userdata.password = await hash(updateUserMasterDto.password.trim(), 10);// Hash the password using bcrypt
             userdata.email = updateUserMasterDto.email;
             userdata.role = updateUserMasterDto.role;
-            userdata.updatedBy = userInfo.username;
-            const result = await this.userMasterRepository.save(userdata);
-            logger.debug(`${this.filepath} > usermaster updated & returned`);
-            return { Error: false, payload: result };
-        } catch (error) {
-            logger.error(`${this.filepath} > ${error} > in usermaster update`);
-            return { Error: true, message: (typeof error == 'object' ? error.message : error) };
-        }
-    }
-
-    async bulkupdate(userInfo: any, BulkUpdateUserMasterDto: BulkUpdateUserMasterDto): Promise<DataMethodResponseType> {
-        try {
-            logger.debug(`usermaster bulkupdate started`);
-            const userdata = await this.userMasterRepository.findOne({ where: { username: BulkUpdateUserMasterDto.username, college: { id: userInfo.collegeId } } });
-            if (userdata == null)
-                throw new BadRequestException("username not exits in usermaster table");
-            userdata.username = BulkUpdateUserMasterDto.username.trim();
-            userdata.password = BulkUpdateUserMasterDto.password != null ? await hash(BulkUpdateUserMasterDto.password.trim(), 10) : userdata.password;// Hash the password using bcrypt
-            userdata.email = BulkUpdateUserMasterDto.email || userdata.email;
-            userdata.role = BulkUpdateUserMasterDto.role;
             userdata.updatedBy = userInfo.username;
             const result = await this.userMasterRepository.save(userdata);
             logger.debug(`${this.filepath} > usermaster updated & returned`);
@@ -120,7 +101,7 @@ export class UserMasterService {
             await this.userMasterRepository.save(userdata);
             logger.debug("password updated");
             logger.debug(`${this.filepath} > usermaster updateForgotPassword`);
-            return { Error: false, message: "updated" };
+            return { Error: false, message: RESPONSE_MESSAGE.UPDATED };
         }
         catch (error) {
             logger.error(`${this.filepath} > ${error} > in usermaster updateForgotPassword`);
@@ -147,12 +128,10 @@ export class UserMasterService {
                 const res = await this.emailservice.sendEmail(user, email, OTP);
                 if (res.Error)
                     throw res.message;
-
-                return { Error: false, message: "OTP sent successfully" };
+                return { Error: false, message: RESPONSE_MESSAGE.OTP_GENERATE };
             }
-            else {
-                throw new BadRequestException("user not found");
-            }
+            else
+                throw ERROR_MESSAGES.USER_NOT_FOUND
         } catch (error) {
             return { Error: true, message: (typeof error == 'object' ? error.message : error) };
         }
@@ -164,11 +143,11 @@ export class UserMasterService {
             const userdata = await this.userMasterRepository.findOneBy({ email: verifyotpusermasterdto.email });
             if (currentDate.getTime() - (userdata.updatedon as Date).getTime() <= 10 * 60 * 1000) {
                 if (userdata.forgot_pwd_otp === verifyotpusermasterdto.otp)
-                    return { Error: false, message: "OTP verified" };
+                    return { Error: false, message: RESPONSE_MESSAGE.OTP_VERIFIED };
                 else
-                    throw new BadRequestException("OTP incorrect");
+                    throw ERROR_MESSAGES.INCORRECT_OTP;
             } else
-                throw new BadRequestException("OTP has been expired");
+                throw ERROR_MESSAGES.OTP_EXPIRE;
         }
         catch (error) {
             return { Error: true, message: (typeof error == 'object' ? error.message : error) };
@@ -192,7 +171,7 @@ export class UserMasterService {
             if (res.Error)
                 throw res.message;
 
-            return { Error: true, payload: res }
+            return { Error: false, payload: res }
         }
         catch (error) {
             return { Error: true, message: (typeof error == 'object' ? error.message : error) };
@@ -212,7 +191,7 @@ export class UserMasterService {
             userdata.updatedBy = username;
             await this.userMasterRepository.save(userdata);
             logger.debug(`${this.filepath} > returned`);
-            return { Error: false, message: "password changed successfully" }
+            return { Error: false, message: RESPONSE_MESSAGE.UPDATED }
         } catch (error) {
             logger.error(`${this.filepath} > ${error} > in changing password`);
             return { Error: true, message: (typeof error == 'object' ? error.message : error) };
@@ -225,17 +204,16 @@ export class UserMasterService {
             const userdata = await this.userMasterRepository.findOne({ where: { username: username } });
             if (!userdata) {
                 logger.debug(`UserMaster with username ${username} not found.`);
-                throw new Error(`UserMaster with username ${username} not found.`);
+                throw ERROR_MESSAGES.USER_NOT_FOUND;
             }
             if (await compare(updatePasswordForStudentTeacherDto.oldpassword, userdata.password)) {
                 userdata.password = await hash(updatePasswordForStudentTeacherDto.newpassword, 10);// Hash the password using bcrypt
                 userdata.updatedBy = username;
                 await this.userMasterRepository.save(userdata);
                 logger.debug(`${this.filepath} > returned`);
-                return { Error: false, message: "password changed successfully" }
-            } else {
-                return { Error: true, message: "Incorrect old password." }
-            }
+                return { Error: false, message: RESPONSE_MESSAGE.UPDATED }
+            } else
+                throw ERROR_MESSAGES.INCORRECT_PASS
         } catch (error) {
             logger.error(`${this.filepath} > ${error} > in changing password`);
             return { Error: true, message: (typeof error == 'object' ? error.message : error) };
@@ -271,7 +249,7 @@ export class UserMasterService {
             logger.debug(`usermaster remove started`);
             await this.userMasterRepository.delete(userId);
             logger.debug(`${this.filepath} > usermaster removed & returned`);
-            return { Error: false, message: "removed" };
+            return { Error: false, message: RESPONSE_MESSAGE.DELETED };
         } catch (error) {
             logger.error(`${this.filepath} > ${error} > in removing usermaster`);
             return { Error: true, message: (typeof error == 'object' ? error.message : error) };
@@ -285,8 +263,8 @@ export class UserMasterService {
                 where: { username: username }
             });
             if (result == null)
-                throw "User not found";
-            if (result.role == 'ADMIN') {
+                throw ERROR_MESSAGES.USER_NOT_FOUND;
+            if (result.role == UserRole.ADMIN) {
                 const res = await this.userMasterRepository.findOne({
                     where: { username: username },
                     select: {
@@ -310,7 +288,7 @@ export class UserMasterService {
 
                 logger.debug(`${this.filepath} > returned > ${res}`);
                 return { Error: false, payload: payload };
-            } else if (result.role === 'TEACHER') {
+            } else if (result.role === UserRole.TEACHER) {
                 const res = await this.userMasterRepository.findOne({
                     where: { username: username },
                     select: {
@@ -334,7 +312,7 @@ export class UserMasterService {
 
                 logger.debug(`${this.filepath} > returned > ${res}`);
                 return { Error: false, payload: payload };
-            } else if (result.role === 'STUDENT') {
+            } else if (result.role === UserRole.STUDENT) {
                 const res = await this.userMasterRepository.findOne({
                     where: { username: username },
                     select: {
@@ -374,11 +352,9 @@ export class UserMasterService {
                 user.refreshToken = refreshToken;
                 await this.userMasterRepository.save(user);
                 logger.debug(`${this.filepath} > usermaster RefreshToken saved & returned`);
-                return { Error: false, message: "saved" };
-            } else {
-                logger.debug(`User with ID ${userId} not found. > returned null`);
-                return { Error: false, message: null }; // Or return an appropriate response indicating the user is not found.
-            }
+                return { Error: false, message: RESPONSE_MESSAGE.UPDATED };
+            } else
+                throw ERROR_MESSAGES.USER_NOT_FOUND;
         } catch (error) {
             logger.error(`${this.filepath} > ${error} > in saving refreshtoken usermaster`);
             return { Error: true, message: (typeof error == 'object' ? error.message : error) };
@@ -393,11 +369,9 @@ export class UserMasterService {
                 user.refreshToken = " ";
                 await this.userMasterRepository.save(user);
                 logger.debug(`${this.filepath} > usermaster RefreshToken removed & returned`);
-                return { Error: false, message: "deleted" };
-            } else {
-                logger.debug(`User with ID ${userId} not found. > returned null`);
-                return { Error: false, message: null }; // Or return an appropriate response indicating the user is not found.
-            }
+                return { Error: false, message: RESPONSE_MESSAGE.DELETED };
+            } else
+                throw ERROR_MESSAGES.USER_NOT_FOUND;
         } catch (error) {
             logger.error(`${this.filepath} > ${error} > in deleting refresh token usermaster`);
             return { Error: true, message: (typeof error == 'object' ? error.message : error) };

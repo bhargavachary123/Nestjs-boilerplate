@@ -9,6 +9,7 @@ import logger from 'src/loggerfile/logger';
 import * as path from 'path';
 import { UserRole } from 'src/enum';
 import { DataMethodResponseType, NormalMethodResponseType } from 'src/return.formats';
+import { RESPONSE_MESSAGE } from 'src/constraints';
 
 @Injectable()
 export class AdminMasterService {
@@ -36,7 +37,7 @@ export class AdminMasterService {
             adminMaster.updatedBy = userInfo.username;
             await this.adminMasterRepository.save(adminMaster);
             logger.debug(`${this.filepath} > admin saved & returned`);
-            return { Error: false, message: "created" };
+            return { Error: false, message: RESPONSE_MESSAGE.CREATED };
         } catch (error) {
             logger.error(`${this.filepath} > ${error} > in creating admin`);
             return { Error: true, message: (typeof error == 'object' ? error.message : error) };
@@ -72,7 +73,7 @@ export class AdminMasterService {
             logger.debug(`admin remove started`);
             await this.adminMasterRepository.delete(adminId);
             logger.debug(`${this.filepath} > admin deleted & returned`);
-            return { Error: false, message: "deleted" }
+            return { Error: false, message: RESPONSE_MESSAGE.DELETED }
         } catch (error) {
             logger.error(`${this.filepath} > ${error} > in deleting admin`);
             return { Error: true, message: (typeof error == 'object' ? error.message : error) };
