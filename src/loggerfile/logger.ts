@@ -1,4 +1,4 @@
-import { format, createLogger, transports } from 'winston';
+import { format, createLogger } from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
 
 const logFormat = format.combine(
@@ -10,12 +10,13 @@ const logger = createLogger({
   format: logFormat,
   transports: [
     new DailyRotateFile({
-      level:'info',
+      level: process.env.LOG_LEVEL || 'info',
       filename: 'logs/rotate-%DATE%.log',
       datePattern: 'YYYY-MM-DD',
-      zippedArchive: true,
-      maxFiles: '15d', // past 15 days log files 
-      maxSize: '30m', //each file max 30mb if exceed it will create one more file on same day
+      // Maximum size of the file after which it will rotate.This can be a number of bytes, or units of kb, mb, and gb.If using the units, add 'k', 'm', or 'g' as the suffix.
+      maxFiles: '15d',
+      // Maximum number of logs to keep. This can be a number of files or number of days. If using days, add 'd' as the suffix.
+      maxSize: '30m',
     }), 
   ],
 });
