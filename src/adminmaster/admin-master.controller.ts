@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, Param, UseGuards, Post, ParseIntPipe, UsePipes, ValidationPipe, Request } from '@nestjs/common';
-import { AdminMaster } from './admin-master.entity';
 import { AdminMasterDto } from './dto/admin-master.dto';
 import { AdminMasterService } from './admin-master.service';
 import { ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';

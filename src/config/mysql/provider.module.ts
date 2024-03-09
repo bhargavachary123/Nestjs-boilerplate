@@ -3,8 +3,6 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { MysqlModule } from './mysql.module';
 import { MysqlService } from './mysql.service';
 
-
-
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -18,7 +16,6 @@ import { MysqlService } from './mysql.service';
         database: mysqlService.database,
         timezone:'+05:30',
         autoLoadEntities: true,
-        charset: 'latin1',
         synchronize: true,
         logging: ["error"],
         logger: "file",

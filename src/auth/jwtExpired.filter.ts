@@ -1,6 +1,6 @@
 // jwtExpired.filter.ts
 
-import { ExceptionFilter, Catch, ArgumentsHost, UnauthorizedException } from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost } from '@nestjs/common';
 import { TokenExpiredError } from 'jsonwebtoken';
 
 @Catch(TokenExpiredError)

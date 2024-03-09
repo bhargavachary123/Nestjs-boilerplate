@@ -22,7 +22,6 @@ export class AuthService {
     const user = await this.userMasterService.findByUsername(username);
     if (user.payload && (await compare(pass, user.payload.password))) {
       const { password, ...result } = user.payload;
-      console.log("validateUser validate user ", result);
       return result;
     }
     return null;
@@ -34,9 +33,9 @@ export class AuthService {
         throw user.message;
       }
       user = user.user;
-      const payload = { error: false, username: user.username, sub: user.id, role: user.role, collegeId: user.college.id, collegeName: user.college.code, name: user.name };
+      const payload = { error: false, username: user.username, usermasterId: user.id, role: user.role, collegeId: user.college.id, collegeName: user.college.code, name: user.name, id:user.id };
 
-      const refreshToken = this.tokenService.generateRefreshToken(user.id);
+      const refreshToken = this.tokenService.generateRefreshToken();
 
       // Save the refresh token to the user record or any other secure storage mechanism
 
@@ -57,8 +56,6 @@ export class AuthService {
   async logout(user: any) {
     try {
       await this.userMasterService.deleteRefreshToken(user.sub);
-      // if(response.Error)
-      //   throw response.message;
       return {
         Error: false,
         access_token: "",

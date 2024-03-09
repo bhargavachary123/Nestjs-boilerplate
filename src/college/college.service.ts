@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { College } from './college.entity';
 import { CollegeDto, UpdateCollegeDto } from './dto/college.dto';
 import logger from 'src/loggerfile/logger';
-import { Connection } from 'typeorm';
 import * as path from 'path';
 
 @Injectable()
@@ -13,7 +12,6 @@ export class CollegeService {
     constructor(
         @InjectRepository(College)
         private readonly collegeRepository: Repository<College>,
-        private readonly connection: Connection,
     ) {
         this.filepath = path.basename(__filename);
     }

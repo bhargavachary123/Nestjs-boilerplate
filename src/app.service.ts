@@ -103,7 +103,6 @@ export class AppService {
     try {
       const colleges = await this.collegeRepository.find();
       if (colleges.length == 0) {
-        console.log("college")
         const college = new College();
         college.name = "example college";
         college.code = "clg";

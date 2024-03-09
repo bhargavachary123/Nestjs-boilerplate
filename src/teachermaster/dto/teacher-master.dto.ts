@@ -1,5 +1,4 @@
-import { RType } from "src/usermaster/user-master.entity";
-import { IsArray, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from "@nestjs/swagger";
 
 export class TeacherMasterDto {
@@ -18,11 +17,6 @@ export class TeacherMasterDto {
   @IsString()
   username: string;
 
-  // @ApiProperty({ enum: RType })
-  // @IsNotEmpty()
-  // @IsEnum(RType)
-  // role: RType;
-
   @ApiProperty({ type: String })
   @IsNotEmpty()
   @IsString()
@@ -37,12 +31,12 @@ export class TeacherMasterDto {
 }
 export class TeacherMasterBulkDto {
   @ApiProperty({ type: String })
-  // @IsNotEmpty()
+  @IsNotEmpty()
   @IsString()
   name: string;
 
   @ApiProperty({ type: String })
-  // @IsNotEmpty()
+  @IsNotEmpty()
   @IsEmail()
   email: string;
 
@@ -50,11 +44,6 @@ export class TeacherMasterBulkDto {
   @IsNotEmpty()
   @IsString()
   username: string;
-
-  // @ApiProperty({ enum: RType })
-  // @IsEnum(RType)
-  // @IsNotEmpty()
-  // role: RType;
 
   @ApiProperty({ type: String })
   @IsString()

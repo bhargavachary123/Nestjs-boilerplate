@@ -10,7 +10,6 @@ import logger from './loggerfile/logger';
 @ApiTags("Home")
 @Controller('')
 export class AppController {
-
   constructor(private readonly appService: AppService) { }
 
 
@@ -132,5 +131,4 @@ export class AppController {
       return { Error: true, message: (typeof error == 'object' ? error.message : error) };
     }
   }
-
 }

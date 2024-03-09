@@ -9,7 +9,6 @@ import { EmailService } from 'src/email/email';
 import { StudentMasterService } from 'src/studentmaster/student-master.service';
 import { StudentMaster } from 'src/studentmaster/student-master.entity';
 import { HttpModule } from '@nestjs/axios';
-import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [

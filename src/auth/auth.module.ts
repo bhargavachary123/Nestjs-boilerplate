@@ -3,7 +3,6 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { LocalStrategy } from './local.strategy';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from './auth.controller';
 import { TokenService } from './token.service';
@@ -13,7 +12,6 @@ import { UserMasterService } from 'src/usermaster/user-master.service';
 import { UserMaster } from 'src/usermaster/user-master.entity';
 import { EmailService } from 'src/email/email';
 
-console.log(jwtConstants.secret," jwtConstants.secret ")
 @Module({
   imports: [
     UserMasterModule,

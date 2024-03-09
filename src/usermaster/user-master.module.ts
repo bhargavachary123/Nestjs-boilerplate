@@ -7,8 +7,6 @@ import { AuthService } from 'src/auth/auth.service';
 import { TokenService } from 'src/auth/token.service';
 import { JwtModule } from '@nestjs/jwt';
 import { EmailService } from 'src/email/email';
-// import { CacheModule } from '@nestjs/cache-manager';
-// import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserMaster]),JwtModule,

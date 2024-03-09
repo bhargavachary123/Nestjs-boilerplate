@@ -25,7 +25,6 @@ import { UserMaster } from './usermaster/user-master.entity';
 import { College } from './college/college.entity';
 import { JwtService } from '@nestjs/jwt';
 
-console.log(`${process.cwd()}/${process.env.NODE_ENV}.env`)
 @Module({
   imports: [
     ThrottlerModule.forRoot({

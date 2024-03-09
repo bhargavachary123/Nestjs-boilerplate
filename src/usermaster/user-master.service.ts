@@ -37,7 +37,6 @@ export class UserMasterService {
             const user = await this.userMasterRepository.findOne({ where: { username: userMasterDto.username, college: { id: userMasterDto.collegeId } } });
             if (user)
                 throw new BadRequestException("username exits for same college");
-            // console.log(`${JSON.stringify(user)}`)
             const userMaster = new UserMaster();
             userMaster.username = userMasterDto.username.trim();
             userMaster.password = await hash(userMasterDto.password.trim(), 10);// Hash the password using bcrypt
@@ -376,7 +375,6 @@ export class UserMasterService {
                 logger.debug(`${this.filepath} > usermaster RefreshToken saved & returned`);
                 return { Error: false, message: "saved" };
             } else {
-                // console.log(`User with ID ${userId} not found.`);
                 logger.debug(`User with ID ${userId} not found. > returned null`);
                 return { Error: false, message: null }; // Or return an appropriate response indicating the user is not found.
             }
@@ -396,7 +394,6 @@ export class UserMasterService {
                 logger.debug(`${this.filepath} > usermaster RefreshToken removed & returned`);
                 return { Error: false, message: "deleted" };
             } else {
-                // console.log(`User with ID ${userId} not found.`);
                 logger.debug(`User with ID ${userId} not found. > returned null`);
                 return { Error: false, message: null }; // Or return an appropriate response indicating the user is not found.
             }
