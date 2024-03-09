@@ -284,7 +284,7 @@ export class UserMasterService {
             const result = await this.userMasterRepository.findOne({
                 where: { username: username }
             });
-            if(result==null)
+            if (result == null)
                 throw "User not found";
             if (result.role == 'ADMIN') {
                 const res = await this.userMasterRepository.findOne({
@@ -303,10 +303,10 @@ export class UserMasterService {
                             name: true
                         }
                     },
-                    relations: ['college', 'admin']
+                    relations: { college: true, admin: true }
                 });
 
-                const payload = { ...res, name: res.admin.name };
+                const payload = { ...res, name: res.admin.name, id: res.admin.id };
 
                 logger.debug(`${this.filepath} > returned > ${res}`);
                 return { Error: false, payload: payload };
@@ -327,10 +327,10 @@ export class UserMasterService {
                             name: true
                         }
                     },
-                    relations: ['college', 'teacher']
+                    relations: { teacher: true, college: true }
                 });
 
-                const payload = { ...res, name: res.teacher.name };
+                const payload = { ...res, name: res.teacher.name, id: res.teacher.id };
 
                 logger.debug(`${this.filepath} > returned > ${res}`);
                 return { Error: false, payload: payload };
@@ -352,10 +352,10 @@ export class UserMasterService {
                             currentyear: true
                         }
                     },
-                    relations: ['college']
+                    relations: { college: true, student: true }
                 });
 
-                const payload = { ...res, name: res.student.name };
+                const payload = { ...res, name: res.student.name, id: res.student.id };
 
                 logger.debug(`${this.filepath} > returned > ${res}`);
                 return { Error: false, payload: payload };
