@@ -6,6 +6,7 @@ import { compare } from 'bcrypt';
 import { UserMasterService } from 'src/usermaster/user-master.service';
 import logger from 'src/loggerfile/logger';
 import * as path from 'path';
+import { LoginResponseType } from 'src/return.formats';
 
 @Injectable()
 export class AuthService {
@@ -27,13 +28,13 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
+  async login(user: any): Promise<LoginResponseType> {
     try {
       if (user.error) {
         throw user.message;
       }
       user = user.user;
-      const payload = { error: false, username: user.username, usermasterId: user.id, role: user.role, collegeId: user.college.id, collegeName: user.college.code, name: user.name, id:user.id };
+      const payload = { error: false, username: user.username, usermasterId: user.id, role: user.role, collegeId: user.college.id, collegeName: user.college.code, name: user.name, id: user.id };
 
       const refreshToken = this.tokenService.generateRefreshToken();
 
@@ -67,7 +68,7 @@ export class AuthService {
     }
   }
 
-  async refreshAccessToken(refreshToken: string) {
+  async refreshAccessToken(refreshToken: string): Promise<string> {
     try {
       const user = await this.userMasterService.findUserIdByRefreshToken(refreshToken);
 

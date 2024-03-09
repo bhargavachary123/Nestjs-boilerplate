@@ -5,6 +5,7 @@ import { College } from './college.entity';
 import { CollegeDto, UpdateCollegeDto } from './dto/college.dto';
 import logger from 'src/loggerfile/logger';
 import * as path from 'path';
+import { DataMethodResponseType, NormalMethodResponseType } from 'src/return.formats';
 
 @Injectable()
 export class CollegeService {
@@ -16,7 +17,7 @@ export class CollegeService {
         this.filepath = path.basename(__filename);
     }
 
-    async create(username: string, collegeDto: CollegeDto) {
+    async create(username: string, collegeDto: CollegeDto): Promise<NormalMethodResponseType> {
         try {
             logger.debug(`college create started`);
             const college = new College();
@@ -33,7 +34,7 @@ export class CollegeService {
         }
     }
 
-    async findAll() {
+    async findAll(): Promise<DataMethodResponseType> {
         try {
             logger.debug("college findAll started");
             const result = await this.collegeRepository.find();
@@ -45,7 +46,7 @@ export class CollegeService {
         }
     }
 
-    async findOne(clgId: number) {
+    async findOne(clgId: number): Promise<DataMethodResponseType> {
         try {
             logger.debug("college findOne started");
             const result = await this.collegeRepository.findOneBy({ id: clgId });
@@ -58,7 +59,7 @@ export class CollegeService {
 
     }
 
-    async remove(clgId: string) {
+    async remove(clgId: string): Promise<NormalMethodResponseType> {
         try {
             logger.debug("college remove started");
             await this.collegeRepository.delete(clgId);
@@ -70,7 +71,7 @@ export class CollegeService {
         }
     }
 
-    async update(username: string, updateCollegeDto: UpdateCollegeDto) {
+    async update(username: string, updateCollegeDto: UpdateCollegeDto): Promise<NormalMethodResponseType> {
         try {
             logger.debug("college update started");
             const college = await this.collegeRepository.findOneBy({ id: updateCollegeDto.id });

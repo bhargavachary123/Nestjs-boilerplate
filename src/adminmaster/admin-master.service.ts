@@ -8,6 +8,7 @@ import { UserMaster } from 'src/usermaster/user-master.entity';
 import logger from 'src/loggerfile/logger';
 import * as path from 'path';
 import { UserRole } from 'src/enum';
+import { DataMethodResponseType, NormalMethodResponseType } from 'src/return.formats';
 
 @Injectable()
 export class AdminMasterService {
@@ -20,10 +21,10 @@ export class AdminMasterService {
         this.filepath = path.basename(__filename);
     }
 
-    async create(userInfo,  adminMasterDto: AdminMasterDto) {
+    async create(userInfo, adminMasterDto: AdminMasterDto): Promise<NormalMethodResponseType> {
         try {
             logger.debug(`admin create started`);
-            const userdata = { "username": adminMasterDto.username, "password": adminMasterDto.password, "role": UserRole.ADMIN, "collegeId": userInfo.collegeId, "email":adminMasterDto.email };
+            const userdata = { "username": adminMasterDto.username, "password": adminMasterDto.password, "role": UserRole.ADMIN, "collegeId": userInfo.collegeId, "email": adminMasterDto.email };
             logger.debug(`user create is calling with values > ${JSON.stringify(userdata)}`);
             const user = await this.userMasterService.create(userInfo.username, userdata);
             logger.debug(`return from user create > ${JSON.stringify(user)}`)
@@ -42,7 +43,7 @@ export class AdminMasterService {
         }
     }
 
-    async findAll() {
+    async findAll(): Promise<DataMethodResponseType> {
         try {
             logger.debug("admin findAll started");
             const result = await this.adminMasterRepository.find();
@@ -54,7 +55,7 @@ export class AdminMasterService {
         }
     }
 
-    async findOne(adminId: number) {
+    async findOne(adminId: number): Promise<DataMethodResponseType> {
         try {
             logger.debug("admin findOne started");
             const result = await this.adminMasterRepository.findOneBy({ id: adminId });
@@ -66,7 +67,7 @@ export class AdminMasterService {
         }
     }
 
-    async remove(adminId: string) {
+    async remove(adminId: string): Promise<NormalMethodResponseType> {
         try {
             logger.debug(`admin remove started`);
             await this.adminMasterRepository.delete(adminId);

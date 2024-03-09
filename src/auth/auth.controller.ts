@@ -17,7 +17,7 @@ export class AuthController {
   @Post('refresh')
   @ApiResponse({ status: 201, description: 'The token refresh successfully.' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  async refreshAccessToken(@Body() refreshDto: RefreshDto) {
+  async refreshAccessToken(@Body() refreshDto: RefreshDto): Promise<{ access_token:string}> {
     const accessToken = await this.authService.refreshAccessToken(refreshDto.refreshToken);
     return { access_token: accessToken };
   }
@@ -33,7 +33,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles( 'ADMIN')
   @Get('logout')
-  @ApiResponse({ status: 201, description: 'logout successfully.' })
+  @ApiResponse({ status: 201, description: 'The logout successfully.' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   logout(@Request() req) {
     return this.authService.logout(req.user);
@@ -46,5 +46,4 @@ export class AuthController {
   getProfile(@Request() req) {
     return req.user;
   }
-
 }

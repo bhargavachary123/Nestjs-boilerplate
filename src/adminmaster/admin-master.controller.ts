@@ -7,6 +7,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import * as path from 'path';
+import { DataMethodResponseType, NormalMethodResponseType } from 'src/return.formats';
 
 @ApiTags('Admin')
 @ApiSecurity("JWT-auth")
@@ -22,7 +23,7 @@ export class AdminMasterController {
     @ApiResponse({ status: 201, description: 'The record has been successfully created.' })
     @ApiResponse({ status: 403, description: 'Forbidden.' })
     @UsePipes(new ValidationPipe())
-    async create(@Request() req, @Body() adminMasterDto: AdminMasterDto) {
+    async create(@Request() req, @Body() adminMasterDto: AdminMasterDto): Promise<NormalMethodResponseType> {
         logger.debug(`admin create is calling`);
         const result = await this.adminMasterService.create(req.user, adminMasterDto);
         logger.debug(`${this.filepath} > return in controller > ${result}`);
@@ -34,7 +35,7 @@ export class AdminMasterController {
     @Get()
     @ApiResponse({ status: 201, description: 'The All records fetched successfully.' })
     @ApiResponse({ status: 403, description: 'Forbidden.' })
-    async findAll() {
+    async findAll(): Promise<DataMethodResponseType> {
         logger.debug(`admin findall is calling`);
         const result = await this.adminMasterService.findAll();
         logger.debug(`${this.filepath} > return in controller > ${result}`);
@@ -46,7 +47,7 @@ export class AdminMasterController {
     @Get(':adminId')
     @ApiResponse({ status: 201, description: 'The record fetched successfully.' })
     @ApiResponse({ status: 403, description: 'Forbidden.' })
-    async findOne(@Param('adminId', ParseIntPipe) adminId: number) {
+    async findOne(@Param('adminId', ParseIntPipe) adminId: number): Promise<DataMethodResponseType> {
         logger.debug(`admin findone is calling`);
         const result = await this.adminMasterService.findOne(adminId);
         logger.debug(`${this.filepath} > return in controller > ${result}`);
@@ -58,7 +59,7 @@ export class AdminMasterController {
     @Delete(':adminId')
     @ApiResponse({ status: 201, description: 'The record removed successfully.' })
     @ApiResponse({ status: 403, description: 'Forbidden.' })
-    async remove(@Param('adminId') adminId: string) {
+    async remove(@Param('adminId') adminId: string):Promise< NormalMethodResponseType> {
         logger.debug(`admin remove is calling`);
         const result = await this.adminMasterService.remove(adminId);
         logger.debug(`${this.filepath} > return in controller > ${result}`);

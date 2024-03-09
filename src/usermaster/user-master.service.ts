@@ -17,6 +17,7 @@ import { College } from 'src/college/college.entity';
 import { EmailService } from 'src/email/email';
 import { compare } from 'bcrypt';
 import * as path from 'path';
+import { DataMethodResponseType, NormalMethodResponseType } from 'src/return.formats';
 
 @Injectable()
 export class UserMasterService {
@@ -29,7 +30,7 @@ export class UserMasterService {
         this.filepath = path.basename(__filename);
     }
 
-    async create(username: string, userMasterDto: UserMasterDto) {
+    async create(username: string, userMasterDto: UserMasterDto): Promise<DataMethodResponseType> {
         try {
             logger.debug(`usermaster create started`);
             logger.error(`usermaster create > ${JSON.stringify(userMasterDto)}`);
@@ -54,7 +55,7 @@ export class UserMasterService {
         }
     }
 
-    async update(userInfo: { username: string, collegeId: number }, updateUserMasterDto: UpdateUserMasterDto) {
+    async update(userInfo: { username: string, collegeId: number }, updateUserMasterDto: UpdateUserMasterDto): Promise<DataMethodResponseType> {
         try {
             logger.debug(`usermaster update started`);
             const userdata = await this.userMasterRepository.findOne({ where: { id: updateUserMasterDto.id, college: { id: userInfo.collegeId } } });
@@ -74,7 +75,7 @@ export class UserMasterService {
         }
     }
 
-    async bulkupdate(userInfo: any, BulkUpdateUserMasterDto: BulkUpdateUserMasterDto) {
+    async bulkupdate(userInfo: any, BulkUpdateUserMasterDto: BulkUpdateUserMasterDto): Promise<DataMethodResponseType> {
         try {
             logger.debug(`usermaster bulkupdate started`);
             const userdata = await this.userMasterRepository.findOne({ where: { username: BulkUpdateUserMasterDto.username, college: { id: userInfo.collegeId } } });
@@ -94,7 +95,7 @@ export class UserMasterService {
         }
     }
 
-    async updateEmail(obj: any) {
+    async updateEmail(obj: any): Promise<DataMethodResponseType> {
         try {
             logger.debug(`usermaster updateEmail started`);
             const data = await this.userMasterRepository.findOneBy({ id: obj.userId })
@@ -109,7 +110,7 @@ export class UserMasterService {
         }
     }
 
-    async updateForgotPassword(forgotpasswordusermasterdto: ForgotPasswordUserMasterDto) {
+    async updateForgotPassword(forgotpasswordusermasterdto: ForgotPasswordUserMasterDto): Promise<NormalMethodResponseType> {
         try {
             logger.debug(`usermaster updateForgotPassword started`);
             const userdata = await this.userMasterRepository.findOneBy({ email: forgotpasswordusermasterdto.email })
@@ -127,7 +128,7 @@ export class UserMasterService {
         }
     }
 
-    async verifyUserAndSendOTP(email: string) {
+    async verifyUserAndSendOTP(email: string): Promise<NormalMethodResponseType> {
         try {
             logger.debug("usermaster verifyUserAndSendOTP started");
             const userdata = await this.userMasterRepository.findOneBy({ email: email });
@@ -157,7 +158,7 @@ export class UserMasterService {
         }
     }
 
-    async verifyOTPOfUser(verifyotpusermasterdto: VerifyOTPUserMasterDto) {
+    async verifyOTPOfUser(verifyotpusermasterdto: VerifyOTPUserMasterDto): Promise<NormalMethodResponseType> {
         try {
             const currentDate = new Date(); // Get the current date
             const userdata = await this.userMasterRepository.findOneBy({ email: verifyotpusermasterdto.email });
@@ -174,7 +175,7 @@ export class UserMasterService {
         }
     }
 
-    async sendotptoemail(email: string) {
+    async sendotptoemail(email: string): Promise<DataMethodResponseType> {
         try {
             logger.debug("usermaster sendotptoemail started");
             const OTP = Math.floor(100000 + Math.random() * 900000);
@@ -191,14 +192,14 @@ export class UserMasterService {
             if (res.Error)
                 throw res.message;
 
-            return res
+            return { Error: true, payload: res }
         }
         catch (error) {
             return { Error: true, message: (typeof error == 'object' ? error.message : error) };
         }
     }
 
-    async updatePassword(username: string, passUpdateUserMasterDto: PassUpdateUserMasterDto) {
+    async updatePassword(username: string, passUpdateUserMasterDto: PassUpdateUserMasterDto): Promise<NormalMethodResponseType> {
         try {
             logger.debug(`usermaster updatePassword started`);
             const userdata = await this.userMasterRepository.findOne({ where: { username: passUpdateUserMasterDto.username } });
@@ -218,7 +219,7 @@ export class UserMasterService {
         }
     }
 
-    async updatePasswordForStudentTeacher(username: string, updatePasswordForStudentTeacherDto: UpdatePasswordForStudentTeacherDto) {
+    async updatePasswordForStudentTeacher(username: string, updatePasswordForStudentTeacherDto: UpdatePasswordForStudentTeacherDto): Promise<NormalMethodResponseType> {
         try {
             logger.debug(`usermaster updatePasswordForStudentTeacher started`);
             const userdata = await this.userMasterRepository.findOne({ where: { username: username } });
@@ -241,7 +242,7 @@ export class UserMasterService {
         }
     }
 
-    async findAll() {
+    async findAll(): Promise<DataMethodResponseType> {
         try {
             logger.debug("usermaster findAll started");
             const result = await this.userMasterRepository.find();
@@ -253,7 +254,7 @@ export class UserMasterService {
         }
     }
 
-    async findOne(userId: number) {
+    async findOne(userId: number): Promise<DataMethodResponseType> {
         try {
             logger.debug("usermaster findOne started");
             const result = await this.userMasterRepository.findOneBy({ id: userId });
@@ -265,7 +266,7 @@ export class UserMasterService {
         }
     }
 
-    async remove(userId: string) {
+    async remove(userId: string): Promise<NormalMethodResponseType> {
         try {
             logger.debug(`usermaster remove started`);
             await this.userMasterRepository.delete(userId);
@@ -277,7 +278,7 @@ export class UserMasterService {
         }
     }
 
-    async findByUsername(username: string) {
+    async findByUsername(username: string): Promise<DataMethodResponseType> {
         try {
             logger.debug(`usermaster findByUsername started`);
             const result = await this.userMasterRepository.findOne({
@@ -365,7 +366,7 @@ export class UserMasterService {
         }
     }
 
-    async saveRefreshToken(userId: number, refreshToken: string) {
+    async saveRefreshToken(userId: number, refreshToken: string): Promise<NormalMethodResponseType> {
         try {
             logger.debug(`usermaster saveRefreshToken started`);
             const user = await this.userMasterRepository.findOneBy({ id: userId });
@@ -384,7 +385,7 @@ export class UserMasterService {
         }
     }
 
-    async deleteRefreshToken(userId: number) {
+    async deleteRefreshToken(userId: number): Promise<NormalMethodResponseType> {
         try {
             logger.debug(`usermaster deleteRefreshToken started`)
             const user = await this.userMasterRepository.findOneBy({ id: userId });
@@ -403,7 +404,7 @@ export class UserMasterService {
         }
     }
 
-    async findUserIdByRefreshToken(refreshToken: string) {
+    async findUserIdByRefreshToken(refreshToken: string): Promise<DataMethodResponseType> {
         try {
             logger.debug(`usermaster findUserIdByRefreshToken started`);
             const result = await this.userMasterRepository.findOneBy({ refreshToken: refreshToken });
