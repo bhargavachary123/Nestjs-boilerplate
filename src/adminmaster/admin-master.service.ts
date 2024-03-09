@@ -7,6 +7,7 @@ import { UserMasterService } from 'src/usermaster/user-master.service';
 import { UserMaster } from 'src/usermaster/user-master.entity';
 import logger from 'src/loggerfile/logger';
 import * as path from 'path';
+import { UserRole } from 'src/enum';
 
 @Injectable()
 export class AdminMasterService {
@@ -22,7 +23,7 @@ export class AdminMasterService {
     async create(userInfo,  adminMasterDto: AdminMasterDto) {
         try {
             logger.debug(`admin create started`);
-            const userdata = { "username": adminMasterDto.username, "password": adminMasterDto.password, "role": adminMasterDto.role, "collegeId": userInfo.collegeId, "email":adminMasterDto.email };
+            const userdata = { "username": adminMasterDto.username, "password": adminMasterDto.password, "role": UserRole.ADMIN, "collegeId": userInfo.collegeId, "email":adminMasterDto.email };
             logger.debug(`user create is calling with values > ${JSON.stringify(userdata)}`);
             const user = await this.userMasterService.create(userInfo.username, userdata);
             logger.debug(`return from user create > ${JSON.stringify(user)}`)

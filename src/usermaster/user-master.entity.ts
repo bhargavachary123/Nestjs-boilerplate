@@ -3,12 +3,7 @@ import { AdminMaster } from 'src/adminmaster/admin-master.entity';
 import { StudentMaster } from 'src/studentmaster/student-master.entity';
 import { TeacherMaster } from 'src/teachermaster/teacher-master.entity';
 import { College } from 'src/college/college.entity';
-
-export enum RType {
-    ADMIN = "ADMIN",
-    TEACHER = "TEACHER",
-    STUDENT = "STUDENT"
-}
+import { Status, UserRole } from 'src/enum';
 
 @Entity()
 export class UserMaster {
@@ -21,9 +16,16 @@ export class UserMaster {
 
     @Column({
         type: 'enum',
-        enum: RType
+        enum: UserRole
     })
-    role: RType;
+    role: UserRole;
+
+    @Column({
+        type: 'enum',
+        enum: Status,
+        default: Status.ACTIVE
+    })
+    status: Status;
 
     @Column()
     password: string;

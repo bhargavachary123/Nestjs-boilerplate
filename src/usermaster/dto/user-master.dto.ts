@@ -1,6 +1,6 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
-import { RType } from "../user-master.entity";
 import { ApiProperty } from "@nestjs/swagger";
+import { UserRole } from "src/enum";
 
 export class UserMasterDto
 {
@@ -9,10 +9,10 @@ export class UserMasterDto
     @IsString()
     username: string;
 
-    @ApiProperty({ enum: RType })
+    @ApiProperty({ enum: UserRole })
     @IsNotEmpty()
-    @IsEnum(RType)
-    role: RType;
+    @IsEnum(UserRole)
+    role: UserRole;
 
     @ApiProperty({ type: String })
     @IsNotEmpty()
@@ -40,10 +40,10 @@ export class UpdateUserMasterDto {
     @IsString()
     username: string;
 
-    @ApiProperty({ enum: RType })
+    @ApiProperty({ enum: UserRole })
     @IsNotEmpty()
-    @IsEnum(RType)
-    role: RType;
+    @IsEnum(UserRole)
+    role: UserRole;
 
     @ApiProperty({ type: String })
     @IsNotEmpty()
@@ -63,10 +63,10 @@ export class BulkUpdateUserMasterDto {
     @IsString()
     username: string;
 
-    @ApiProperty({ enum: RType })
+    @ApiProperty({ enum: UserRole })
     @IsNotEmpty()
-    @IsEnum(RType)
-    role: RType;
+    @IsEnum(UserRole)
+    role: UserRole;
 
     @ApiProperty({ type: String })
     password: string;

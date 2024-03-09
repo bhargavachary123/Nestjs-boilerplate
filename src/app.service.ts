@@ -6,12 +6,13 @@ import * as fs from 'fs';
 import logger from './loggerfile/logger';
 import { College } from './college/college.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RType, UserMaster } from './usermaster/user-master.entity';
+import { UserMaster } from './usermaster/user-master.entity';
 import { Repository } from 'typeorm';
 import { AdminMaster } from './adminmaster/admin-master.entity';
 import { hash } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from './auth/constants';
+import { UserRole } from './enum';
 
 @Injectable()
 export class AppService {
@@ -115,7 +116,7 @@ export class AppService {
         const user = new UserMaster();
         user.username = username;
         user.password = await hash(password, 10);
-        user.role = RType.ADMIN;
+        user.role = UserRole.ADMIN;
         user.college = { id: colleges[0].id } as College;
         const res = await this.userMasterRepository.save(user);
         const admin = new AdminMaster();
