@@ -7,14 +7,14 @@ import { MysqlService } from './mysql.service';
   imports: [
     TypeOrmModule.forRootAsync({
       imports: [MysqlModule],
-      useFactory: (mysqlService: MysqlService):TypeOrmModuleOptions => ({
+      useFactory: (mysqlService: MysqlService): TypeOrmModuleOptions => ({
         type: 'mysql',
         host: mysqlService.host,
         port: mysqlService.port,
         username: mysqlService.username,
         password: mysqlService.password,
         database: mysqlService.database,
-        timezone:'+05:30',
+        timezone: '+05:30',
         autoLoadEntities: true,
         synchronize: true,
         logging: ["error"],
@@ -24,4 +24,4 @@ import { MysqlService } from './mysql.service';
     }),
   ],
 })
-export class MysqlDatabaseProviderModule {}
+export class MysqlDatabaseProviderModule { }
