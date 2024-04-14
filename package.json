@@ -18,7 +18,12 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "echo 'No e2e tests implemented yet.'",
     "seed:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-seeding/dist/cli.js seed",
-    "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config"
+    "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
+    "typeorm": "npm run build && ts-node ./node_modules/typeorm/cli",
+    "migrations:run": "npm run typeorm migration:run -- -d dist/typeOrm.config.js",
+    "migrations:generate": "npm run typeorm -- -d dist/typeOrm.config.js migration:generate",
+    "migrations:create": "npm run typeorm -- migration:create",
+    "migrations:revert": "npm run typeorm -- -d dist/typeOrm.config.js migration:revert"
   },
   "dependencies": {
     "@nestjs/axios": "^3.0.0",
@@ -81,7 +86,7 @@
     "supertest": "6.3.3",
     "ts-jest": "29.1.1",
     "ts-loader": "9.4.4",
-    "ts-node": "10.9.1",
+    "ts-node": "^10.9.1",
     "tsconfig-paths": "4.2.0",
     "typescript": "5.1.6"
   },
