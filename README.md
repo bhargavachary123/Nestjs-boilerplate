@@ -71,4 +71,3 @@ MAIL_SENDER=support@yourapp.com
 MAIL_PASSWORD=email-server-password
 ### Links
 - Swagger (API docs): <http://localhost:3000/api>
-- Swagger (API docs): <http://localhost:3000/api>
