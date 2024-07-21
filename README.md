@@ -12,13 +12,10 @@ Starting from the base project https://github.com/nestjs/nest/tree/master/sample
 - [x] Events and CornJobs.
 - [x] Validation.
 - [x] Logging.
-- [x] CORS.
-- [x] Logging.
-- [x] Logging.
 - [x] Error handling.
 - [x] Daily Rotate Log Files.
 - [x] Admin and User roles.
-- [x] Allow specific Origns.
+- [x] Allow specific Origns(CORS).
 - [x] File uploads. Support local.
 - [x] Swagger.
 - [x] Docker support.
