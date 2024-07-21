@@ -5,20 +5,16 @@ Starting from the base project https://github.com/nestjs/nest/tree/master/sample
 - [x] Database. Support [TypeORM] and [Mysql].
 - [x] Seeding [typeorm-seeding]
 - [x] Config Service [@nestjs/config]
-- [x] Config Service [@nestjs/config]
 - [x] Mailing [nodemailer]
 - [x] Jwt Authentication and Authorization.
 - [x] Cacheing Data using Redis.
 - [x] Events and CornJobs.
 - [x] Validation.
 - [x] Logging.
-- [x] CORS.
-- [x] Logging.
-- [x] Logging.
 - [x] Error handling.
 - [x] Daily Rotate Log Files.
 - [x] Admin and User roles.
-- [x] Allow specific Origns.
+- [x] Allow specific Origns(CORS).
 - [x] File uploads. Support local.
 - [x] Swagger.
 - [x] Docker support.
@@ -73,5 +69,4 @@ JWT_EXPIRATION_TIME = '15d' || '8h' || '1y'
 MAIL_SENDER=support@yourapp.com
 MAIL_PASSWORD=email-server-password
 ### Links
-- Swagger (API docs): <http://localhost:3000/api>
 - Swagger (API docs): <http://localhost:3000/api>
