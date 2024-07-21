@@ -69,8 +69,4 @@ JWT_EXPIRATION_TIME = '15d' || '8h' || '1y'
 MAIL_SENDER=support@yourapp.com
 MAIL_PASSWORD=email-server-password
 ### Links
-<<<<<<< HEAD
 - Swagger (API docs): <http://localhost:3000/api>
-=======
-- Swagger (API docs): <http://localhost:3000/api>
->>>>>>> 47ac037ea44c92b587d04073efc424974b61a387
